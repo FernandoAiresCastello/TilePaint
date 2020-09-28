@@ -367,5 +367,35 @@ namespace TilePaint
             FileInfo file = (FileInfo)item;
             LoadTileImage(file.FullName);
         }
+
+        private void BtnSwap_Click(object sender, EventArgs e)
+        {
+            int temp = RightColor;
+            RightColor = LeftColor;
+            LeftColor = temp;
+
+            UpdateColorButtons();
+        }
+
+        private void BtnReplace_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("This will replace in the tile image all pixels of the L color with the R color. Are you sure?", 
+                "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+            if (result == DialogResult.OK)
+            {
+                for (int y = 0; y < TileDisplay.Graphics.Rows; y++)
+                {
+                    for (int x = 0; x < TileDisplay.Graphics.Cols; x++)
+                    {
+                        int currentColor = TileDisplay.Graphics.GetTile(x, y).BackColor;
+                        int newColor = currentColor == LeftColor ? RightColor : currentColor;
+                        TileDisplay.Graphics.PutTile(x, y, 0, newColor, newColor);
+                    }
+                }
+
+                TileDisplay.Refresh();
+            }
+        }
     }
 }
